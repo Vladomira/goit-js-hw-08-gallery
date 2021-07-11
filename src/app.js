@@ -88,7 +88,7 @@ refs.galleryList.insertAdjacentHTML('afterbegin', addsGalleryItems);
 
 const onOpenModal = event =>{
   event.preventDefault();   
-  // window.addEventListener("keydown", onEscExit);
+  window.addEventListener("keydown", onEscExit);
 
   if (event.target.nodeName !== "IMG"){
     return;
@@ -101,10 +101,10 @@ refs.galleryList.addEventListener('click', onOpenModal);
 
 
 const onCloseModal = event => {
-  // window.removeEventListener("keydown", onEscExit);
+  window.removeEventListener("keydown", onEscExit);
   const isHasSpecClass = event.target.classList.contains('lightbox__overlay');
-  
-  if (event.target.nodeName === "BUTTON" || isHasSpecClass ){    
+    
+  if (event.target.nodeName === "BUTTON" || isHasSpecClass){    
    refs.modalW.classList.remove('is-open');
    refs.modalImg.src =  ' '; 
    refs.modalImg.alt = ' ';
@@ -116,19 +116,13 @@ refs.modalOverlay.addEventListener('click', onCloseModal);
 
 
 
-
-
-// const onEscKeyExit = 
-
-// function onEscExit(e){
-//   const escape = 'Escape'; 
-//   let isEscape = e.code === escape;
-//   if(isEscape){
-//   refs.modalW.classList.remove('is-open');
-//   refs.modalImg.src =  ' '; 
-//   refs.modalImg.alt = ' ';
-//   }
-// }
+function onEscExit(e){  
+  if(e.code === 'Escape'){
+  refs.modalW.classList.remove('is-open');
+  refs.modalImg.src =  ' '; 
+  refs.modalImg.alt = ' ';
+  }
+}
 // window.addEventListener("keydown", onEscExit);
 
 
