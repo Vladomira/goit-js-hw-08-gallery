@@ -82,10 +82,10 @@ const addsGalleryItems = galleryItems.map(({preview, description, original}) => 
   return `<li class = "gallery__item"><a class ="gallery__link" href ='${original}'>
   <img class = 'gallery__image' src = '${preview}' alt = '${description}'/></a></li>`;
 }).join(' ');
-
 refs.galleryList.insertAdjacentHTML('afterbegin', addsGalleryItems);
 
 
+// открывает модальное окно
 const onOpenModal = event =>{
   event.preventDefault();   
   window.addEventListener("keydown", onEscExit);
@@ -95,11 +95,12 @@ const onOpenModal = event =>{
   } refs.modalW.classList.add('is-open');
   refs.modalImg.src = event.target.parentNode.href; 
   refs.modalImg.alt = event.target.alt;
+
 }
 refs.galleryList.addEventListener('click', onOpenModal);
 
 
-
+// ========закрывает модальное окне крестиком или оверлеем
 const onCloseModal = event => {
   window.removeEventListener("keydown", onEscExit);
   const isHasSpecClass = event.target.classList.contains('lightbox__overlay');
@@ -114,16 +115,14 @@ refs.closeBtn.addEventListener('click', onCloseModal);
 refs.modalOverlay.addEventListener('click', onCloseModal);
 
 
-
-
-function onEscExit(e){  
+// ===закрытие модального окна клавишей Esc
+function onEscExit(e){ 
   if(e.code === 'Escape'){
   refs.modalW.classList.remove('is-open');
   refs.modalImg.src =  ' '; 
   refs.modalImg.alt = ' ';
   }
 }
-// window.addEventListener("keydown", onEscExit);
 
 
 
@@ -132,31 +131,70 @@ function onEscExit(e){
 
 
 
+const findImageIndex = () => {
+  const src = document.querySelector('.lightbox__image').src; 
+  return  galleryItems.findIndex(image => image.original === src);
+};
+console.log(findImageIndex());
 
-// стрелки
-// const onArrowAction = function flipGallery(e) {   
-//   if(e.code === 'ArrowRight'){
-//     li.nextSibling  
-//     console.log(e.code)
-//   }else  if(e.code === 'ArrowLeft'){
-//     li.previousSibling    
+const changeImg = imageIndex => {
+  const el = galleryItems.find(function (value, index){
+    if (imageIndex === index) 
+      return value;
+    });
+    document.querySelector('.lightbox__image').src = el.original;
+};
+
+const maxLength = galleryItems.length;
+
+const showPrevious = () => {
+  let imageIndex = findImageIndex();
+  imageIndex <= 0 ? (imageIndex = maxLength - 1) : imageIndex--;
+  changeImg(imageIndex);
+}
+
+  const showNext = () => {
+    let imageIndex = findImageIndex();
+    let nextImageIndex = imageIndex + 1;
+    nextImageIndex >= maxLength ? (imageIndex = 0) : imageIndex +=1;
+    changeImg(imageIndex);
+  }
+
+  function onPressArrowRight(e){
+    if(e.code === 'ArrowRight'){
+      showNext();
+    }
+    if(e.code === 'ArrowLeft'){
+      showPrevious();
+    }
+  }
+  window.addEventListener("keydown", onPressArrowRight);
+
+
+
+
+
+// не работает
+// const arrayOriginal= galleryItems.filter(el => el.original);
+// const arrayElements = [...arrayOriginal];
+// // console.log(arrayElements[0]);
+
+// function itaration (){
+//   for (let i = 0; i < arrayElements.length, i += 1;) {    
+//     if (arrayElements[i]) {
+//        return arrayElements[i] +=1;
+//   }else if(arrayElements[8]) {    
+//     return arrayElements[0];  
+//   }
 // }
 // }
-// refs.galleryList.addEventListener('click', onArrowAction);
 
-
-// ***********
-//Закрытие модального окна по клику на div.lightbox__overlay.
-// const onOverlayExit = e => {
-// const isHasSpecClass = e.target.classList.contains('lightbox__overlay');
-//   if (!isHasSpecClass){
-//     return;
-//   } refs.modalW.classList.remove('is-open');
-//   refs.modalImg.src =  ' '; 
-//   refs.modalImg.alt = ' ';
+// const onArrowAction = function flipGallery(e) {    
+//   if (e.code === 'ArrowRight'){
+//     itaration();
+//   } 
 // }
-// refs.modalOverlay.addEventListener('click', onCloseModal);
-
+// window.addEventListener("keydown", onArrowAction); 
 
 
 
